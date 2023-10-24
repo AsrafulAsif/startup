@@ -18,7 +18,7 @@ void main() async {
   );
 
   await LocalNotificationService.setupchannelIdFlutterNotifications();
-  // LocalNotificationService.initialize();
+  
   
   runApp(
     MultiProvider(

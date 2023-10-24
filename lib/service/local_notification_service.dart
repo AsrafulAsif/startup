@@ -1,72 +1,86 @@
 import 'dart:developer';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../screen/notification/notification_screen.dart';
 
 class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-
-  static Future<void> setupchannelIdFlutterNotifications() async{
+  static Future<void> setupchannelIdFlutterNotifications() async {
     AndroidNotificationChannel channel1 = const AndroidNotificationChannel(
-    'high_importance_channel1', // id
-    'High Importance Notifications', // title
-    description:
-        'This channel is used for important notifications.', // description
-    importance: Importance.max,
-  );
+      'high_importance_channel1', // id
+      'High Importance Notifications', // title
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.max,
+    );
 
-  AndroidNotificationChannel channel2 = const AndroidNotificationChannel(
-    'high_importance_channel2', // id
-    'High Importance Notifications', // title
-    description:
-        'This channel is used for important notifications.', // description
-    importance: Importance.max,
-  );
+    AndroidNotificationChannel channel2 = const AndroidNotificationChannel(
+      'high_importance_channel2', // id
+      'High Importance Notifications', // title
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.max,
+    );
 
-  AndroidNotificationChannel channel3 = const AndroidNotificationChannel(
-    'high_importance_channel3', // id
-    'High Importance Notifications', // title
-    description:
-        'This channel is used for important notifications.', // description
-    importance: Importance.max,
-  );
+    AndroidNotificationChannel channel3 = const AndroidNotificationChannel(
+      'high_importance_channel3', // id
+      'High Importance Notifications', // title
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.max,
+    );
 
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel1);
 
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel2);
 
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel1);
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel3);
+  }
 
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel2);
+  static void initialize(BuildContext context) {
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+    );
 
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel3);
-  }    
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) {
+        switch (notificationResponse.notificationResponseType) {
+          case NotificationResponseType.selectedNotification:
 
+            log("payload:::::::::::::::::::::::::::${notificationResponse.payload.toString()}");
+            // On select notification
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const NotificationScreen()));
+            break;
+          case NotificationResponseType.selectedNotificationAction:
+            // Perhaps this section is for custom action with notification
+             log(notificationResponse.payload.toString());
+            break;
+        }
+      },
+    );
+  }
 
-
-
-  // static void initialize() {
-  //   const InitializationSettings initializationSettings =
-  //       InitializationSettings(
-  //     android: AndroidInitializationSettings("@mipmap/ic_launcher"),
-  //   );
-
-  //   flutterLocalNotificationsPlugin.initialize(
-  //     initializationSettings,  
-  //   );
-  // }
-
-  static void showFCMForgroundNotification(BuildContext context, RemoteMessage message) async {
+  static void showFCMForgroundNotification(
+      BuildContext context, RemoteMessage message) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       const NotificationDetails notificationDetailsFor1 = NotificationDetails(
@@ -106,6 +120,7 @@ class LocalNotificationService {
           message.notification!.title,
           message.notification!.body,
           notificationDetailsFor1,
+          payload: message.data["type"]
         );
       } else if (message.notification!.android!.channelId ==
           "high_importance_channel2") {
@@ -122,7 +137,6 @@ class LocalNotificationService {
           message.notification!.title,
           "high_importance_channel3 + heads up ${message.notification!.body}",
           notificationDetailsFor3,
-          
         );
       }
     } on Exception catch (e) {

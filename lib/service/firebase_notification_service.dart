@@ -67,6 +67,7 @@ class FirebaseNotificationService {
         log("FirebaseMessaging.onMessage.listen");
         if (message != null) {
           LocalNotificationService.showFCMForgroundNotification(context,message);
+          
         }
       },
     );

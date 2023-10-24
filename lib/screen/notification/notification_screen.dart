@@ -10,6 +10,10 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return const Scaffold(
+      body: Center(
+        child: Text("I am notification screen"),
+      ),
+    );
   }
 }
