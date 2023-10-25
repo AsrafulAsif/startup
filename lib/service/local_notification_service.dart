@@ -1,9 +1,8 @@
 import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import '../screen/notification/notification_screen.dart';
+import '../main.dart';
 
 class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -50,7 +49,7 @@ class LocalNotificationService {
         ?.createNotificationChannel(channel3);
   }
 
-  static void initialize(BuildContext context) {
+  static void initialize() {
     const InitializationSettings initializationSettings =
         InitializationSettings(
       android: AndroidInitializationSettings("@mipmap/ic_launcher"),
@@ -62,25 +61,23 @@ class LocalNotificationService {
           (NotificationResponse notificationResponse) {
         switch (notificationResponse.notificationResponseType) {
           case NotificationResponseType.selectedNotification:
-
             log("payload:::::::::::::::::::::::::::${notificationResponse.payload.toString()}");
+
+            navigatorKey.currentState?.pushNamed('/notification_screen');
+
             // On select notification
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const NotificationScreen()));
+
             break;
           case NotificationResponseType.selectedNotificationAction:
             // Perhaps this section is for custom action with notification
-             log(notificationResponse.payload.toString());
+            log(notificationResponse.payload.toString());
             break;
         }
       },
     );
   }
 
-  static void showFCMForgroundNotification(
-      BuildContext context, RemoteMessage message) async {
+  static void showFCMForgroundNotification(RemoteMessage message) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       const NotificationDetails notificationDetailsFor1 = NotificationDetails(
@@ -116,28 +113,27 @@ class LocalNotificationService {
       if (message.notification!.android!.channelId ==
           "high_importance_channel1") {
         await flutterLocalNotificationsPlugin.show(
-          id,
-          message.notification!.title,
-          message.notification!.body,
-          notificationDetailsFor1,
-          payload: message.data["type"]
-        );
+            id,
+            message.notification!.title,
+            message.notification!.body,
+            notificationDetailsFor1,
+            payload: message.data["route"]);
       } else if (message.notification!.android!.channelId ==
           "high_importance_channel2") {
         await flutterLocalNotificationsPlugin.show(
-          id,
-          message.notification!.title,
-          "high_importance_channel2 + heads up ${message.notification!.body}",
-          notificationDetailsFor2,
-        );
+            id,
+            message.notification!.title,
+            message.notification!.body,
+            notificationDetailsFor2,
+            payload: message.data["route"]);
       } else if (message.notification!.android!.channelId ==
           "high_importance_channel3") {
         await flutterLocalNotificationsPlugin.show(
-          id,
-          message.notification!.title,
-          "high_importance_channel3 + heads up ${message.notification!.body}",
-          notificationDetailsFor3,
-        );
+            id,
+            message.notification!.title,
+            message.notification!.body,
+            notificationDetailsFor3,
+            payload: message.data["route"]);
       }
     } on Exception catch (e) {
       log(e.toString());

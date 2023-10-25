@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:startup/screen/notification/notification_screen.dart';
+import 'package:startup/main.dart';
 import 'package:startup/service/local_notification_service.dart';
 
 @pragma('vm:entry-point')
@@ -10,10 +9,9 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 }
 
 class FirebaseNotificationService {
-
   final firebaseMessing = FirebaseMessaging.instance;
 
-  Future<void> setUpFCMNotification(BuildContext context) async {
+  Future<void> setUpFCMNotification() async {
     final settings = await firebaseMessing.requestPermission(
       alert: true,
       announcement: true,
@@ -27,7 +25,7 @@ class FirebaseNotificationService {
     log('Permission granted: ${settings.authorizationStatus}');
 
     if (settings.authorizationStatus != AuthorizationStatus.authorized) {
-    log('Permission not granted: ${settings.authorizationStatus}');
+      log('Permission not granted: ${settings.authorizationStatus}');
     }
 
     final fcmToken = await firebaseMessing.getToken();
@@ -38,10 +36,7 @@ class FirebaseNotificationService {
         log('call this when app is terminated');
         log("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const NotificationScreen()));
+          navigatorKey.currentState?.pushNamed('/notification_screen');
         }
       },
     );
@@ -52,10 +47,7 @@ class FirebaseNotificationService {
         log('call this when app is  in background and not terminated');
         log("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message != null) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const NotificationScreen()));
+          navigatorKey.currentState?.pushNamed('/notification_screen');
         }
       },
     );
@@ -66,8 +58,7 @@ class FirebaseNotificationService {
         log('call this when app is forground');
         log("FirebaseMessaging.onMessage.listen");
         if (message != null) {
-          LocalNotificationService.showFCMForgroundNotification(context,message);
-          
+          LocalNotificationService.showFCMForgroundNotification(message);
         }
       },
     );

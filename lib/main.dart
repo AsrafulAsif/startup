@@ -1,14 +1,14 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:startup/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:startup/screen/home/home_screen.dart';
+import 'package:startup/screen/notification/notification_screen.dart';
+import 'package:startup/service/firebase_notification_service.dart';
 import 'package:startup/service/local_notification_service.dart';
 import 'firebase_options.dart';
 
-
-
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,10 +16,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  LocalNotificationService.initialize();
+  FirebaseNotificationService().setUpFCMNotification();
   await LocalNotificationService.setupchannelIdFlutterNotifications();
-  
-  
+
   runApp(
     MultiProvider(
       providers: [
@@ -43,7 +43,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const HomeScreen(),
+      navigatorKey: navigatorKey,
+      routes: {
+        '/notification_screen': (context) => const NotificationScreen(),
+      },
     );
   }
 }
-
