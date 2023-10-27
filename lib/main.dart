@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:startup/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:startup/screen/auth/login_screen.dart';
 import 'package:startup/screen/home/home_screen.dart';
 import 'package:startup/screen/notification/notification_screen.dart';
 import 'package:startup/service/firebase_notification_service.dart';
@@ -46,6 +47,8 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       routes: {
         '/notification_screen': (context) => const NotificationScreen(),
+        '/login_screen': (context) => const Loginscreen(),
+
       },
     );
   }

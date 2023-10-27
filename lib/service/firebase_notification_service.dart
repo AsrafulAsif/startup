@@ -31,12 +31,16 @@ class FirebaseNotificationService {
     final fcmToken = await firebaseMessing.getToken();
     log('Token $fcmToken');
 
-    FirebaseMessaging.instance.getInitialMessage().then(
+    firebaseMessing.getInitialMessage().then(
       (RemoteMessage? message) {
         log('call this when app is terminated');
         log("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
+          if(message.data['route']== 'notification'){
           navigatorKey.currentState?.pushNamed('/notification_screen');
+          }else if(message.data['route']== 'login'){
+            navigatorKey.currentState?.pushNamed('/login_screen');
+          }
         }
       },
     );
@@ -47,7 +51,7 @@ class FirebaseNotificationService {
         log('call this when app is  in background and not terminated');
         log("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message != null) {
-          navigatorKey.currentState?.pushNamed('/notification_screen');
+          navigatorKey.currentState?.pushNamed(message.data['route']);
         }
       },
     );
