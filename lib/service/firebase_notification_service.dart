@@ -13,13 +13,13 @@ class FirebaseNotificationService {
 
   Future<void> setUpFCMNotification() async {
     final settings = await firebaseMessing.requestPermission(
-      alert: true,
+      alert: false,
       announcement: true,
       badge: true,
       carPlay: true,
-      criticalAlert: true,
+      criticalAlert: false,
       provisional: true,
-      sound: true,
+      sound: false,
     );
 
     log('Permission granted: ${settings.authorizationStatus}');
@@ -29,16 +29,16 @@ class FirebaseNotificationService {
     }
 
     final fcmToken = await firebaseMessing.getToken();
-    log('Token $fcmToken');
+    log('Token::: $fcmToken');
 
     firebaseMessing.getInitialMessage().then(
       (RemoteMessage? message) {
         log('call this when app is terminated');
         log("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
-          if(message.data['route']== 'notification'){
-          navigatorKey.currentState?.pushNamed('/notification_screen');
-          }else if(message.data['route']== 'login'){
+          if (message.data['route'] == 'notification') {
+            navigatorKey.currentState?.pushNamed('/notification_screen');
+          } else if (message.data['route'] == 'login') {
             navigatorKey.currentState?.pushNamed('/login_screen');
           }
         }
@@ -51,7 +51,11 @@ class FirebaseNotificationService {
         log('call this when app is  in background and not terminated');
         log("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message != null) {
-          navigatorKey.currentState?.pushNamed(message.data['route']);
+          if (message.data['route'] == 'notification') {
+            navigatorKey.currentState?.pushNamed('/notification_screen');
+          } else if (message.data['route'] == 'login') {
+            navigatorKey.currentState?.pushNamed('/login_screen');
+          }
         }
       },
     );
@@ -67,13 +71,12 @@ class FirebaseNotificationService {
       },
     );
 
-    //this function recive the background message and it a
+    //this function recive the background message and it a top level function which is outside from class
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
     FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
   }
 
   Future<void> saveTokenToDatabase(String token) async {
-    log("Refress token");
-    log("Rtoken  $token");
+    log("Refress token::: $token");
   }
 }

@@ -2,12 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:startup/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:startup/screen/auth/login_screen.dart';
-import 'package:startup/screen/home/home_screen.dart';
-import 'package:startup/screen/notification/notification_screen.dart';
+import 'package:startup/routes/app_routes.dart';
 import 'package:startup/service/firebase_notification_service.dart';
 import 'package:startup/service/local_notification_service.dart';
 import 'firebase_options.dart';
+import 'routes/on_generate_route.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -17,8 +16,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  LocalNotificationService.initialize();
   FirebaseNotificationService().setUpFCMNotification();
+  LocalNotificationService.initialize();
   await LocalNotificationService.setupchannelIdFlutterNotifications();
 
   runApp(
@@ -43,13 +42,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      initialRoute: AppRoutes.notificationPage,
       navigatorKey: navigatorKey,
-      routes: {
-        '/notification_screen': (context) => const NotificationScreen(),
-        '/login_screen': (context) => const Loginscreen(),
-
-      },
+      onGenerateRoute: RouteGenerator.onGenerate,
     );
   }
 }

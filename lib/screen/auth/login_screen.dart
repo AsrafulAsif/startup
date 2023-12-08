@@ -1,7 +1,13 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../components/custome_textfield.dart';
+import 'package:provider/provider.dart';
+import 'package:startup/model/request/appuser_login_request.dart';
+import 'package:startup/provider/auth_provider.dart';
+import 'package:startup/service/shared_pref_service.dart';
+import '../../custome_widget/custome_textfield.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
@@ -15,6 +21,23 @@ class _LoginscreenState extends State<Loginscreen> {
   var passwordController = TextEditingController();
 
   bool showErrorText = false;
+
+  Future<void> _logIn() async {
+    final currentContext = context;
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    AppUserLogInRequest appUserLogInRequest = AppUserLogInRequest(
+        mobileNumber: mobileNumberController.text,
+        appPassword: passwordController.text,
+        deviceType: Platform.operatingSystem.toUpperCase(),
+        fcmToken: fcmToken.toString());
+    if (!mounted) return;
+    await context.read<AuthProvider>().logIn(appUserLogInRequest);
+    if (await SharedPreferencesService.getToken() != null) {
+      if (!mounted) return;
+      Navigator.pushNamed(currentContext, '/home_screen');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -95,7 +118,7 @@ class _LoginscreenState extends State<Loginscreen> {
                             setState(() {
                               showErrorText = false;
                             });
-                            // _registration();
+                            _logIn();
                           }
                         },
                         child: const SizedBox(

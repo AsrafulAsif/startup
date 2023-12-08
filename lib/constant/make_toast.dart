@@ -15,7 +15,7 @@ class MakeToast{
 
   static void makingSuccesseToast(SimpleResponse successData){
     Fluttertoast.showToast(
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.green,
               msg:
                   '${successData.message} with status code ${successData.statusCode}');
 

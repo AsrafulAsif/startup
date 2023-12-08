@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:startup/model/request/appuser_register_request.dart';
 import 'package:startup/provider/auth_provider.dart';
-import 'package:startup/components/custome_textfield.dart';
+import 'package:startup/custome_widget/custome_textfield.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -33,10 +33,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<AuthProvider>(context, listen: false)
           .registration(registerRequest);
-      // var pro = Provider.of<InternetCheckProvidr>(context, listen: false);
-      // pro.hasInternatFun();
-
-      // log(pro.hasInternat.toString());
     });
   }
 
@@ -129,13 +125,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             _registration();
                           }
                         },
-                        child: const SizedBox(
+                        child: SizedBox(
                           height: 50.0,
                           width: 150,
                           child: Center(
                             child: Text(
-                              "Submit",
-                              style: TextStyle(
+                              context.watch<AuthProvider>().loading
+                                  ? "Processing"
+                                  : "Submit",
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
