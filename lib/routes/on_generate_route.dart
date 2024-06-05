@@ -14,8 +14,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case AppRoutes.loginPage:
         return MaterialPageRoute(builder: (_) => const Loginscreen());
-      // case AppRoutes.notificationPage:
-      //   return MaterialPageRoute(builder: (_) => const NotificationScreen());
+      case AppRoutes.notificationPage:
+        return MaterialPageRoute(builder: (_) => const NotificationScreen());
       default:
         return errorRoute();
     }
