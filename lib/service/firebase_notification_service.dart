@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:startup/main.dart';
+import 'package:startup/routes/app_routes.dart';
 import 'package:startup/service/local_notification_service.dart';
 
 @pragma('vm:entry-point')
@@ -37,9 +38,9 @@ class FirebaseNotificationService {
         log("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
           if (message.data['route'] == 'notification') {
-            navigatorKey.currentState?.pushNamed('/notification_screen');
+            navigatorKey.currentState?.pushNamed(AppRoutes.notificationPage);
           } else if (message.data['route'] == 'login') {
-            navigatorKey.currentState?.pushNamed('/login_screen');
+            navigatorKey.currentState?.pushNamed(AppRoutes.loginPage);
           }
         }
       },
@@ -52,9 +53,9 @@ class FirebaseNotificationService {
         log("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message != null) {
           if (message.data['route'] == 'notification') {
-            navigatorKey.currentState?.pushNamed('/notification_screen');
+            navigatorKey.currentState?.pushNamed(AppRoutes.notificationPage);
           } else if (message.data['route'] == 'login') {
-            navigatorKey.currentState?.pushNamed('/login_screen');
+            navigatorKey.currentState?.pushNamed(AppRoutes.loginPage);
           }
         }
       },

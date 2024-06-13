@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:startup/routes/app_routes.dart';
 import 'package:startup/routes/unknown_page.dart';
@@ -8,6 +10,7 @@ import 'package:startup/screen/notification/notification_screen.dart';
 class RouteGenerator {
   static Route? onGenerate(RouteSettings settings) {
     final route = settings.name;
+    log("Navigating to route: $route");
 
     switch (route) {
       case AppRoutes.homePage:

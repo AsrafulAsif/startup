@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      initialRoute: AppRoutes.notificationPage,
+      initialRoute: AppRoutes.homePage,
       navigatorKey: navigatorKey,
       onGenerateRoute: RouteGenerator.onGenerate,
     );

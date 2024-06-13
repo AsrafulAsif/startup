@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:startup/routes/app_routes.dart';
 
 import '../main.dart';
 
@@ -65,7 +66,7 @@ class LocalNotificationService {
         String route = payloads["route"];
         log(route);
         if(route == "notification"){
-          navigatorKey.currentState?.pushNamed('/notification_screen');
+          navigatorKey.currentState?.pushNamed(AppRoutes.notificationPage);
         }
       },
 
