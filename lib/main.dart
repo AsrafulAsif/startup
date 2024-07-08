@@ -2,13 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:startup/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:startup/routes/app_routes.dart';
 import 'package:startup/service/firebase_notification_service.dart';
 import 'package:startup/service/local_notification_service.dart';
 import 'firebase_options.dart';
+import 'routes/app_routes.dart';
 import 'routes/on_generate_route.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -10,7 +10,7 @@ import 'package:startup/screen/notification/notification_screen.dart';
 class RouteGenerator {
   static Route? onGenerate(RouteSettings settings) {
     final route = settings.name;
-    log("Navigating to route: $route");
+    log("RouteGenerator Navigating to route: $route");
 
     switch (route) {
       case AppRoutes.homePage:

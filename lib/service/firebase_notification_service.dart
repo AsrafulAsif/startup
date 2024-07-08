@@ -37,11 +37,11 @@ class FirebaseNotificationService {
         log('call this when app is terminated');
         log("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
-          if (message.data['route'] == 'notification') {
-            navigatorKey.currentState?.pushNamed(AppRoutes.notificationPage);
-          } else if (message.data['route'] == 'login') {
-            navigatorKey.currentState?.pushNamed(AppRoutes.loginPage);
-          }
+          // if (message.data['page'] == 'notification') {
+            navigatorKey.currentState?.pushNamed(message.data['page']);
+          // } else if (message.data['page'] == 'login') {
+            // navigatorKey.currentState?.pushNamed(AppRoutes.loginPage);
+          // }
         }
       },
     );
@@ -52,9 +52,9 @@ class FirebaseNotificationService {
         log('call this when app is  in background and not terminated');
         log("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message != null) {
-          if (message.data['route'] == 'notification') {
+          if (message.data['page'] == 'notification') {
             navigatorKey.currentState?.pushNamed(AppRoutes.notificationPage);
-          } else if (message.data['route'] == 'login') {
+          } else if (message.data['page'] == 'login') {
             navigatorKey.currentState?.pushNamed(AppRoutes.loginPage);
           }
         }

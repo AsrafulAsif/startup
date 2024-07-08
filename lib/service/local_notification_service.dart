@@ -63,7 +63,7 @@ class LocalNotificationService {
       onDidReceiveNotificationResponse: (details) {
         log("payload::: ${details.payload}");
         Map<String, dynamic> payloads = json.decode(details.payload.toString());
-        String route = payloads["route"];
+        String route = payloads["page"];
         log(route);
         if(route == "notification"){
           navigatorKey.currentState?.pushNamed(AppRoutes.notificationPage);
@@ -165,7 +165,7 @@ class LocalNotificationService {
             message.notification!.title,
             message.notification!.body,
             notificationDetailsFor3,
-            payload: message.data["route"]);
+            payload: message.data["page"]);
       }
     } on Exception catch (e) {
       log(e.toString());
